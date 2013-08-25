@@ -1,0 +1,8 @@
+[Unit]
+Description=<%= @gem_server_description %>
+
+[Service]
+ExecStart=/bin/bash -c "<%= @gem_path %> server -p <%= @gem_server_port %> -d <%= @gem_server_gem_dir %>"
+
+[Install]
+WantedBy=multi-user.target

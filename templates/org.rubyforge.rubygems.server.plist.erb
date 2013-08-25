@@ -3,11 +3,11 @@
  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
+    <key><%= @gem_server_description %></key>
     <string>org.rubyforge.rubygems.server</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/bin/gem</string>
+        <string><%= @gem_path %></string>
         <string>server</string>
         <string>--daemon</string>
         <string>--port=<%= @gem_server_port %></string>
