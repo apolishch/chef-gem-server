@@ -45,28 +45,47 @@ if node[:gem_server][:enabled]
       source "gem_server_systemd.service.erb"
       owner "root"
       group "root"
-      mode "0644"
+      mode "0755"
       variables(@template_variables)
       notifies :restart, resources(service: "gem_server")
-end
+    end
 
-  when "debian"
+  when "debian", "gentoo", "rhel", "solaris2"
+    template "gem_server" do
+      path "/etc/init.d"
+      source "gem_server.sh.erb"
+      owner "root"
+      group "root"
+      mode "0755"
+      variables(@template_variables.merge({
+        gem_run_levels: node[:gem_server][:gem_run_levels],
+        gem_not_run_levels: node[:gem_server][:gem_not_run_levels]
+      }))
+      notifies :restart, resources(service: "gem_server")
+    end
 
-  when "rhel"
-
-  when "gentoo"
-
-  when "slackware"
-
-  when "openbsd"
-
-  when "solaris2"
+  when "slackware", "openbsd"
+    template "gem_server" do
+      path "/etc/rc.d"
+      source "gem_server.sh.erb"
+      owner "root"
+      group "root"
+      mode "0755"
+      variables(@template_variables.merge({
+        gem_run_levels: node[:gem_server][:gem_run_levels],
+        gem_not_run_levels: node[:gem_server][:gem_not_run_levels]
+      }))
+      notifies :restart, resources(service: "gem_server")
+    end
 
   when "omnios"
+    return
 
   when "windows"
+    return
 
   else
+    return
 
   end
 
