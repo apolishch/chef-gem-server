@@ -1,0 +1,6 @@
+gem "chef"
+gem "fauxhai"
+gem "chefspec"
+gem "test-kitchen"
+gem "berkshelf"
+gem "kitchen-vagrant"

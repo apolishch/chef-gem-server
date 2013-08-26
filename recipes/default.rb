@@ -23,7 +23,7 @@ if node[:gem_server][:enabled]
   directory node[:gem_server][:gem_dir] do
     owner "gb"
     recursive true
-    action create
+    action :create
     mode "744"
   end
 
