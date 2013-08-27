@@ -2,12 +2,6 @@
 # Cookbook Name:: gem_server
 # Recipe:: default
 #
-# Copyright 2013, goBalto Operations
-#
-# All rights reserved - Do Not Redistribute
-#
-
-node.default[:gem_server]={enabled: true, gem_dir: '/usr/share/gem_server/gems', user: 'service_user', group: "root"}
 
 if node[:gem_server][:enabled]
   @template_variables = {
@@ -40,8 +34,8 @@ if node[:gem_server][:enabled]
 
   case node['platform_family']
   when "mac_os_x"
-    template "org.rubyforge.rubygems.server.plist" do
-      path "/Library/LaunchAgents"
+    template "/Library/LaunchAgents/org.rubyforge.rubygems.server.plist" do
+      path "/Library/LaunchAgents/org.rubyforge.rubygems.server.plist"
       source "org.rubyforge.rubygems.server.plist.erb"
       owner node[:gem_server][:user]
       group node[:gem_server][:group]
@@ -52,7 +46,7 @@ if node[:gem_server][:enabled]
 
   when "arch", "suse", "fedora"
     template "gem_server.service" do
-      path "/etc/system/systemd"
+      path "/etc/system/systemd/gem_server.service"
       source "gem_server_systemd.service.erb"
       owner node[:gem_server][:user]
       group node[:gem_server][:group]
@@ -62,8 +56,8 @@ if node[:gem_server][:enabled]
     end
 
   when "debian", "gentoo", "rhel", "solaris2"
-    template "gem_server" do
-      path "/etc/init.d"
+    template "/etc/init.d/gem_server" do
+      path "/etc/init.d/gem_server"
       source "gem_server.sh.erb"
       owner node[:gem_server][:user]
       group node[:gem_server][:group]
@@ -76,8 +70,8 @@ if node[:gem_server][:enabled]
     end
 
   when "slackware", "openbsd"
-    template "gem_server" do
-      path "/etc/rc.d"
+    template "/etc/rc.d/gem_server" do
+      path "/etc/rc.d/gem_server"
       source "gem_server.sh.erb"
       owner node[:gem_server][:user]
       group node[:gem_server][:group]
