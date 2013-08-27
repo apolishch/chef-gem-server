@@ -17,7 +17,7 @@ if node[:gem_server][:enabled]
       gem_path: node[:gem_server][:gem_path]
   }
 
-  group node[:gem_server][:group]
+  group node[:gem_server][:group] do
     action :create
   end
 
