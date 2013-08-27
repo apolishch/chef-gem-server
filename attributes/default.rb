@@ -1,5 +1,7 @@
 default['gem_server']['port']=8808
 default['gem_server']['service_description']="Custom Ruby Gem Server"
+default['gem_server']['user'] = 'root'
+default['gem_server']['group'] = 'root'
 default['gem_server']['gem_path'] = "/usr/bin/gem"
 default['gem_server']['gem_dir']='/usr/share/gem_server/gems'
 default['gem_server']['enabled'] = true

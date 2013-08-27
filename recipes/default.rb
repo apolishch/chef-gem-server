@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+#node.default[:gem_server]={enabled: true, gem_dir: '/usr/share/gem_server/gems', user: 'root', group: "root"}
+
 if node[:gem_server][:enabled]
   @template_variables = {
       gem_server_gem_dir: node[:gem_server][:gem_dir],
@@ -16,7 +18,7 @@ if node[:gem_server][:enabled]
   }
 
   service "gem_server" do
-    action :enable
+    action :nothing
     supports enable: true, start: true, stop: true, restart: true
   end
 
@@ -32,8 +34,8 @@ if node[:gem_server][:enabled]
     template "org.rubyforge.rubygems.server.plist" do
       path "/Library/LaunchAgents"
       source "org.rubyforge.rubygems.server.plist.erb"
-      owner "root"
-      group "root"
+      owner node[:gem_server][:user]
+      group node[:gem_server][:group]
       mode "0644"
       variables(@template_variables)
       notifies :restart, resources(service: "gem_server")
@@ -43,8 +45,8 @@ if node[:gem_server][:enabled]
     template "gem_server.service" do
       path "/etc/system/systemd"
       source "gem_server_systemd.service.erb"
-      owner "root"
-      group "root"
+      owner node[:gem_server][:user]
+      group node[:gem_server][:group]
       mode "0755"
       variables(@template_variables)
       notifies :restart, resources(service: "gem_server")
@@ -54,8 +56,8 @@ if node[:gem_server][:enabled]
     template "gem_server" do
       path "/etc/init.d"
       source "gem_server.sh.erb"
-      owner "root"
-      group "root"
+      owner node[:gem_server][:user]
+      group node[:gem_server][:group]
       mode "0755"
       variables(@template_variables.merge({
         gem_run_levels: node[:gem_server][:gem_run_levels],
@@ -68,8 +70,8 @@ if node[:gem_server][:enabled]
     template "gem_server" do
       path "/etc/rc.d"
       source "gem_server.sh.erb"
-      owner "root"
-      group "root"
+      owner node[:gem_server][:user]
+      group node[:gem_server][:group]
       mode "0755"
       variables(@template_variables.merge({
         gem_run_levels: node[:gem_server][:gem_run_levels],
