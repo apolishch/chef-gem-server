@@ -7,7 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 
-#node.default[:gem_server]={enabled: true, gem_dir: '/usr/share/gem_server/gems', user: 'root', group: "root"}
+node.default[:gem_server]={enabled: true, gem_dir: '/usr/share/gem_server/gems', user: 'service_user', group: "root"}
 
 if node[:gem_server][:enabled]
   @template_variables = {
@@ -16,6 +16,15 @@ if node[:gem_server][:enabled]
       gem_server_description: node[:gem_server][:service_description],
       gem_path: node[:gem_server][:gem_path]
   }
+
+  group node[:gem_server][:group]
+    action :create
+  end
+
+  user node[:gem_server][:user] do
+    action :create
+    gid node[:gem_server][:group]
+  end
 
   service "gem_server" do
     action :nothing
